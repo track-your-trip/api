@@ -66,4 +66,17 @@ class AuthController extends Controller
             'password'  => Hash::make($request->input('password'))
         ]);
     }
+
+    public function uniqueuser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string'
+        ]);
+
+        $usercount = User::where('email', $request->input('email'))->count();
+
+        return ['data' => [
+            'unique' => ($usercount == 0)
+        ]];
+    }
 }

@@ -33,6 +33,7 @@ use Illuminate\Http\Request;
 
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
+Route::post('/register/uniqueuser', 'AuthController@uniqueuser');
 Route::get('/settings', 'SettingsController@index');
 
 Route::middleware('auth:api')->group(function () {
