@@ -14,8 +14,8 @@ class CreateTripsTable extends Migration
     public function up()
     {
         Schema::create('trips', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->id('id');
+            $table->foreignId('user_id');
 
             $table->string('name', 64);
             $table->string('description', 2048)->nullable();

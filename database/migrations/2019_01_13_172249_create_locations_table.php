@@ -14,8 +14,8 @@ class CreateLocationsTable extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('trip_id');
+            $table->id('id');
+            $table->foreignId('trip_id');
 
             $table->string('name', 64);
             $table->string('description', 2048)->nullable();
