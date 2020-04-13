@@ -1,0 +1,54 @@
+extend type Query @guard {
+    locations(
+        name: String @where
+    ): Location 
+        @paginate
+        @softDeletes
+    
+    location(id: ID @eq): Location @find
+}
+
+extend type Mutation @guard {
+    createLocation(
+        input: LocationInput! @spread
+    ): Location
+        @create
+        @inject(context: "user.id", name: "user_id")
+
+    updateLocation(
+        input: LocationInput! @spread
+    ): Location
+        @update
+        @inject(context: "user.id", name: "user_id")
+    
+    deleteLocation(id: ID!): Location @delete
+}
+
+input LocationInput {
+    name: String! @trim @rules(apply: ["string", "max:64"])
+    description: String! @trim @rules(apply: ["string", "max:2048"])
+    beginn: Date! @rules(apply: ["date"])
+    end: Date! @rules(apply: ["date"])
+    lat: Float! @rules(apply: ["numeric"])
+    lng: Float! @rules(apply: ["numeric"])
+
+    trip: LocationBelongsTo!
+}
+
+input LocationBelongsTo {
+    connect: ID
+}
+
+type Location @guard {
+    id: ID!
+    name: String!
+    description: String!
+    beginn: Date!
+    end: Date!
+    lat: Float!
+    lng: Float!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    trip: Trip! @belongsTo
+}

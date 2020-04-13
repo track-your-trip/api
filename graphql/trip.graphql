@@ -1,0 +1,41 @@
+extend type Query @guard {
+    trips(
+        name: String @where
+    ): Trip 
+        @paginate
+        @softDeletes
+    
+    trip(id: ID @eq): Trip @find
+}
+
+extend type Mutation @guard {
+    createTrip(
+        input: TripInput! @spread
+    ): Trip
+        @inject(context: "user.id", name: "user_id")
+        @create
+
+    updateTrip(
+        input: TripInput! @spread
+    ): Trip
+        @update
+        @inject(context: "user.id", name: "user_id")
+    
+    deleteTrip(id: ID!): Trip @delete
+}
+
+input TripInput {
+    name: String! @trim @rules(apply: ["string", "max:64"])
+    description: String! @trim @rules(apply: ["string", "max:2048"])
+}
+
+type Trip @guard {
+    id: ID!
+    name: String!
+    description: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    user: User! @belongsTo
+    locations: [Location!] @hasMany
+}

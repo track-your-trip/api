@@ -1,0 +1,26 @@
+extend type Query @guard {
+    me: User! @auth
+    users: [User!]! @paginate(defaultCount: 10)
+    user(id: ID @eq): User @find
+}
+
+extend type Mutation {
+    login(
+        email: String! @rules(apply: ["email"])
+        password: String!
+    ): LoginToken!
+}
+
+type LoginToken {
+    token: String
+}
+
+type User @guard {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    trips: [Trip!] @hasMany
+}
